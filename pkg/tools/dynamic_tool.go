@@ -278,8 +278,8 @@ func (r *DynamicToolRegistry) registerTFETools() {
 		r.mcpServer.AddTool(tool.Tool, tool.Handler)
 	}
 
-	if toolsets.IsToolEnabled("get_plan_json_output", r.enabledToolsets) {
-		tool := r.createDynamicTFETool("get_plan_json_output", tfeTools.GetPlanJSONOutput)
+	if toolsets.IsToolEnabled("get_plan_changes", r.enabledToolsets) {
+		tool := r.createDynamicTFETool("get_plan_changes", tfeTools.GetPlanChanges)
 		r.mcpServer.AddTool(tool.Tool, tool.Handler)
 	}
 

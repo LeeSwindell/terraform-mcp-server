@@ -104,6 +104,7 @@ automation and interaction capabilities for Infrastructure as Code (IaC) develop
 |----------|-------------|---------|
 | `TFE_ADDRESS` | Sets the Terraform Enterprise/HCP Terraform address for API calls. Must include the protocol (e.g., `https://app.terraform.io`). In streamable-http mode this is the only way to set the address; it cannot be supplied by clients via header or query parameter. | Optional |
 | `TFE_TOKEN` | Terraform Enterprise API token | `""` (empty) |
+| `TF_PLAN_DIFF_MAX_BYTES` | Maximum size of the compact `get_plan_changes` response in bytes; excess detail is truncated while preserving valid JSON | `65536` |
 | `TF_MCP_SHARED_SECRET` | Shared secret sent as the `X-Tf-Mcp-Secret` header on requests to HCP Terraform / TFE, used to identify requests originating from a hosted MCP deployment. Should only be used over TLS. | `""` (empty) |
 | `TFE_SKIP_TLS_VERIFY` | Skip HCP Terraform or Terraform Enterprise TLS verification | `false` |
 | `LOG_LEVEL` | Logging level: `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `panic` (overrides `--log-level` flag) | `info` |
@@ -610,6 +611,8 @@ curl http://localhost:8080/health
 ## Available Tools
 
 [Check out available tools here :link:](https://developer.hashicorp.com/terraform/docs/tools/mcp-server/reference#available-tools)
+
+This fork exposes `get_plan_changes` for compact Terraform plan review. It returns actionable resource and output differences, redacts values marked sensitive, omits full-plan sections, and honors `TF_PLAN_DIFF_MAX_BYTES`. The upstream `get_plan_json_output` tool is intentionally disabled.
 
 ## Available Resources
 

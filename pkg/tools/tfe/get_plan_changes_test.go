@@ -10,16 +10,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPlanJSONOutput(t *testing.T) {
+func TestGetPlanChanges(t *testing.T) {
 	logger := log.New()
 	logger.SetLevel(log.ErrorLevel) // Reduce noise in tests
 
 	t.Run("tool creation", func(t *testing.T) {
-		tool := GetPlanJSONOutput(logger)
+		tool := GetPlanChanges(logger)
 
-		assert.Equal(t, "get_plan_json_output", tool.Tool.Name)
-		assert.Contains(t, tool.Tool.Description, "structured JSON output")
-		assert.Contains(t, tool.Tool.Description, "resource changes")
+		assert.Equal(t, "get_plan_changes", tool.Tool.Name)
+		assert.Contains(t, tool.Tool.Description, "compact JSON")
+		assert.Contains(t, tool.Tool.Description, "Sensitive values are redacted")
 		assert.NotNil(t, tool.Handler)
 
 		// Verify it's marked as read-only
@@ -28,7 +28,7 @@ func TestGetPlanJSONOutput(t *testing.T) {
 		assert.NotNil(t, tool.Tool.Annotations.DestructiveHint)
 		assert.False(t, *tool.Tool.Annotations.DestructiveHint)
 
-		// Check that required parameters are defined
+		// Check required parameters are defined
 		assert.Contains(t, tool.Tool.InputSchema.Required, "plan_id")
 	})
 }

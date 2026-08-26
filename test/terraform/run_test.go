@@ -189,17 +189,19 @@ func TestRunLifecycle(t *testing.T) {
 		assert.Equal(t, string(directLogs), resultText)
 	})
 
-	t.Run("Get plan JSON output", func(t *testing.T) {
-		result, resultText := callTool(t, s, "get_plan_json_output", map[string]any{"plan_id": planID})
-		require.False(t, result.IsError, "get_plan_json_output should not return an error")
-		require.NotEmpty(t, resultText, "get_plan_json_output response must not be empty")
-		require.True(t, gjson.Valid(resultText), "get_plan_json_output should return valid JSON")
-		resourceAction := gjson.Get(resultText, `resource_changes.#(address=="terraform_data.run_test").change.actions.0`).String()
+	t.Run("Get plan changes", func(t *testing.T) {
+		result, resultText := callTool(t, s, "get_plan_changes", map[string]any{"plan_id": planID})
+		require.False(t, result.IsError, "get_plan_changes should not return an error")
+		require.NotEmpty(t, resultText, "get_plan_changes response must not be empty")
+		require.True(t, gjson.Valid(resultText), "get_plan_changes should return valid JSON")
+		resourceAction := gjson.Get(resultText, `resource_changes.#(address=="terraform_data.run_test").actions.0`).String()
 		assert.Equal(t, "create", resourceAction)
-
-		directJSON, err := client.Plans.ReadJSONOutput(t.Context(), planID)
-		require.NoError(t, err)
-		assert.JSONEq(t, string(directJSON), resultText)
+		assert.False(t, gjson.Get(resultText, "planned_values").Exists())
+		assert.False(t, gjson.Get(resultText, "prior_state").Exists())
+		assert.False(t, gjson.Get(resultText, "configuration").Exists())
+		assert.False(t, gjson.Get(resultText, "variables").Exists())
+		assert.False(t, gjson.Get(resultText, "resource_drift").Exists())
+		assert.False(t, gjson.Get(resultText, "summary.drift").Exists())
 	})
 
 	t.Run("Get Sentinel mock", func(t *testing.T) {
