@@ -54,17 +54,17 @@ var ToolToToolset = map[string]string{
 	"force_unlock_workspace":   Terraform,
 
 	// Terraform tools - Runs and Plans
-	"list_runs":            Terraform,
-	"get_run_details":      Terraform,
-	"get_run_comments":     Terraform,
-	"create_run":           Terraform,
-	"action_run":           Terraform,
-	"get_plan_details":     Terraform,
-	"get_plan_logs":        Terraform,
-	"get_plan_json_output": Terraform,
-	"get_apply_details":    Terraform,
-	"get_apply_logs":       Terraform,
-	"get_sentinel_mock":    Terraform,
+	"list_runs":         Terraform,
+	"get_run_details":   Terraform,
+	"get_run_comments":  Terraform,
+	"create_run":        Terraform,
+	"action_run":        Terraform,
+	"get_plan_details":  Terraform,
+	"get_plan_logs":     Terraform,
+	"get_plan_changes":  Terraform,
+	"get_apply_details": Terraform,
+	"get_apply_logs":    Terraform,
+	"get_sentinel_mock": Terraform,
 
 	// Terraform tools - Workspace Variables
 	"list_workspace_variables":  Terraform,

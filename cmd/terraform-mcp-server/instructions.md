@@ -27,6 +27,8 @@ The Terraform MCP server provides tools for generating better Terraform code thr
 
 ## HCP Terraform/TFE Tools (When enterprise tools are enabled AND a Terraform token is provided)
 
+Plan review uses `get_plan_changes`, which returns only actionable resource and output differences. It omits Terraform bulk plan sections, redacts values marked sensitive, and may report truncation when `TF_PLAN_DIFF_MAX_BYTES` is reached. The raw `get_plan_json_output` tool is intentionally unavailable in this fork.
+
 ### Private Registry Tools
 - `search_private_providers` → `get_private_provider_details`
 - `search_private_modules` → `get_private_module_details`
@@ -40,7 +42,7 @@ The Terraform MCP server provides tools for generating better Terraform code thr
 ### Run Execution
 - **Discovery**: `search_run` (empty query returns all) → `get_run_details` (supports json output)
 - **Operations**: `create_run` → `apply_run` OR `discard_run` OR `cancel_run`
-- **Monitoring**: `get_plan_details`/`get_plan_logs` for plans, `get_apply_details`/`get_apply_logs` for applies
+- **Monitoring**: `get_plan_details`/`get_plan_changes`/`get_plan_logs` for plans, `get_apply_details`/`get_apply_logs` for applies
 - Always check run status before attempting operations
 
 ### Variable Management
@@ -65,7 +67,7 @@ The Terraform MCP server provides tools for generating better Terraform code thr
 **Run Management**:
 1. `search_workspaces` → select target
 2. `create_run` → get_run_details to monitor
-3. `get_plan_details/logs` to review changes
+3. `get_plan_details`/`get_plan_changes`/`get_plan_logs` to review changes
 4. User confirmation → `apply_run` OR `discard_run`
 
 **Variable Configuration**:

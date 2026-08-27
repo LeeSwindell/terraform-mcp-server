@@ -4,11 +4,28 @@
 package tools
 
 import (
+	"io"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-mcp-server/pkg/toolsets"
+	"github.com/mark3labs/mcp-go/server"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestPlanToolRegistration(t *testing.T) {
+	logger := log.New()
+	logger.SetOutput(io.Discard)
+	mcpServer := server.NewMCPServer("test", "test")
+
+	registerDynamicTools(mcpServer, logger, []string{toolsets.Terraform})
+	GetDynamicToolRegistry().RegisterSessionWithTFE("test-session")
+
+	registeredTools := mcpServer.ListTools()
+	assert.Contains(t, registeredTools, "get_plan_changes")
+	assert.NotContains(t, registeredTools, "get_plan_json_output")
+}
 
 func TestIsTerraformOperationsEnabled(t *testing.T) {
 	// Save original env var
